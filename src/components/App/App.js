@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import ModalWindow from '../Modal/Modal';
+import Button from '../Button/Button';
+import SpinLoader from '../Loader/Loader';
 import * as imageApi from '../../services/images-api';
 import './App.css';
 
@@ -10,7 +12,7 @@ export default class App extends Component {
     searchQuery: '',
     images: [],
     page: 1,
-    // loading: false,
+    loading: false,
     largeImageUrl: '',
     isOpen: false,
   };
@@ -34,7 +36,7 @@ export default class App extends Component {
   fetchImages = () => {
     const { searchQuery, page } = this.state;
 
-    // this.setState({ loading: true });
+    this.setState({ loading: true });
 
     imageApi
       .fetchImages(searchQuery, page)
@@ -45,16 +47,20 @@ export default class App extends Component {
         })),
       )
       // eslint-disable-next-line no-console
-      .catch(console.error);
-    // .finally(() => this.setState({ loading: false }));
+      .catch(console.error)
+      .finally(() => this.setState({ loading: false }));
   };
 
   handleSearchSubmit = query => {
+    const { searchQuery } = this.state;
+
+    if (searchQuery === query) return;
+
     this.setState({ searchQuery: query, images: [], page: 1 });
   };
 
   render() {
-    const { images, largeImageUrl, isOpen } = this.state;
+    const { images, largeImageUrl, isOpen, loading } = this.state;
 
     return (
       <div className="App">
@@ -68,6 +74,8 @@ export default class App extends Component {
             onClose={this.handleModalClose}
           />
         )}
+        {loading && <SpinLoader />}
+        {images.length > 0 && !loading && <Button onClick={this.fetchImages} />}
       </div>
     );
   }
