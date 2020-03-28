@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
+import ImageGallery from '../ImageGallery/ImageGallery';
+import ModalWindow from '../Modal/Modal';
 import * as imageApi from '../../services/images-api';
 import './App.css';
 
@@ -9,6 +11,8 @@ export default class App extends Component {
     images: [],
     page: 1,
     // loading: false,
+    largeImageUrl: '',
+    isOpen: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -18,6 +22,14 @@ export default class App extends Component {
       this.fetchImages();
     }
   }
+
+  handleImageClick = imageUrl => {
+    this.setState({ largeImageUrl: imageUrl, isOpen: true });
+  };
+
+  handleModalClose = () => {
+    this.setState({ largeImageUrl: '', isOpen: false });
+  };
 
   fetchImages = () => {
     const { searchQuery, page } = this.state;
@@ -42,9 +54,20 @@ export default class App extends Component {
   };
 
   render() {
+    const { images, largeImageUrl, isOpen } = this.state;
+
     return (
       <div className="App">
         <SearchBar onSubmit={this.handleSearchSubmit} />
+        {images.length > 0 && (
+          <ImageGallery items={images} onImageClick={this.handleImageClick} />
+        )}
+        {isOpen && (
+          <ModalWindow
+            largeImg={largeImageUrl}
+            onClose={this.handleModalClose}
+          />
+        )}
       </div>
     );
   }
