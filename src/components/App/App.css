@@ -27,9 +27,9 @@ img {
 }
 
 /*
- * Стили компонента App
+ * Стили компонента ImageFinderContainer
  */
-.App {
+.ImageFinderContainer {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 16px;
