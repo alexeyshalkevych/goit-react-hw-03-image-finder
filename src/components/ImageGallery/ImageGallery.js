@@ -4,7 +4,14 @@ import InfiniteScroll from 'react-infinite-scroller';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import SpinLoader from '../Loader/Loader';
 
-const ImageGallery = ({ items, onImageClick, onImageScroll, hasMore }) => (
+const ImageGallery = ({
+  items,
+  onImageClick,
+  onImageScroll,
+  hasMore,
+  isOpen,
+  onClose,
+}) => (
   <InfiniteScroll
     pageStart={0}
     loadMore={onImageScroll}
@@ -17,6 +24,8 @@ const ImageGallery = ({ items, onImageClick, onImageScroll, hasMore }) => (
           key={image.id + image.webformatURL}
           {...image}
           onImageClick={onImageClick}
+          isOpen={isOpen}
+          onClose={onClose}
         />
       ))}
     </ul>
@@ -32,6 +41,8 @@ ImageGallery.propTypes = {
   onImageClick: PropTypes.func.isRequired,
   onImageScroll: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;

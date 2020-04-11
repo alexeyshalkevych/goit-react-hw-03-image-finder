@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 export default class Modal extends Component {
   static propTypes = {
-    largeImg: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
     onClose: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
   };
 
   backdropRef = createRef();
@@ -36,7 +37,11 @@ export default class Modal extends Component {
   };
 
   render() {
-    const { largeImg } = this.props;
+    const { children, isOpen } = this.props;
+
+    if (!isOpen) {
+      return null;
+    }
 
     return (
       <div
@@ -44,9 +49,7 @@ export default class Modal extends Component {
         ref={this.backdropRef}
         onClick={this.handleBackdropClick}
       >
-        <div className="Modal">
-          <img src={largeImg} alt="" />
-        </div>
+        <div className="Modal">{children}</div>
       </div>
     );
   }

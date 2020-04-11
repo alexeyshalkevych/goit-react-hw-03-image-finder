@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
-import ModalWindow from '../Modal/Modal';
 import * as imageApi from '../../services/images-api';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,7 +10,6 @@ class ImageFinder extends Component {
     searchQuery: '',
     images: [],
     page: 1,
-    largeImageUrl: '',
     isOpen: false,
     hasMore: false,
     error: false,
@@ -25,12 +23,12 @@ class ImageFinder extends Component {
     }
   }
 
-  handleImageClick = imageUrl => {
-    this.setState({ largeImageUrl: imageUrl, isOpen: true });
+  handleImageClick = () => {
+    this.setState({ isOpen: true });
   };
 
   handleModalClose = () => {
-    this.setState({ largeImageUrl: '', isOpen: false });
+    this.setState({ isOpen: false });
   };
 
   fetchImages = () => {
@@ -53,7 +51,7 @@ class ImageFinder extends Component {
         toast.error(`No images!`);
       })
       // eslint-disable-next-line no-console
-      .catch(console.log);
+      .catch(console.error);
   };
 
   handleSearchSubmit = query => {
@@ -65,7 +63,7 @@ class ImageFinder extends Component {
   };
 
   render() {
-    const { images, largeImageUrl, isOpen, hasMore, error } = this.state;
+    const { images, isOpen, hasMore, error } = this.state;
 
     return (
       <div className="ImageFinderContainer">
@@ -76,15 +74,11 @@ class ImageFinder extends Component {
             onImageClick={this.handleImageClick}
             onImageScroll={this.fetchImages}
             hasMore={hasMore}
-          />
-        )}
-        {error && <ToastContainer autoClose={3000} />}
-        {isOpen && (
-          <ModalWindow
-            largeImg={largeImageUrl}
+            isOpen={isOpen}
             onClose={this.handleModalClose}
           />
         )}
+        {error && <ToastContainer autoClose={3000} />}
       </div>
     );
   }
